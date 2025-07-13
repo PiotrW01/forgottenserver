@@ -3544,7 +3544,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 	if (!player) {
 		return;
 	}
-
+	
 	player->resetIdleTime();
 
 	if (playerSaySpell(player, type, text)) {
@@ -3567,6 +3567,27 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 	}
 
 	player->removeMessageBuffer();
+
+	if (!text.empty()) {
+		auto& db = Database::getInstance();
+		std::string channelName = "default";
+
+		if (type == TALKTYPE_PRIVATE_TO) {
+			db.executeQuery(
+			    fmt::format("INSERT INTO `messages` (player_id, message, channel, receiver, timestamp) \
+							VALUES ({:d}, '{}', '{}', '{}', '{}')",
+			                player->getGUID(), text, "private", receiver, OTSYS_DATETIME()));
+		}
+		else {
+			if (channelId != 0) {
+				channelName = g_chat->getChannelById(channelId)->getName();
+			}
+			db.executeQuery(
+				fmt::format("INSERT INTO `messages` (player_id, message, channel, timestamp) \
+							VALUES ({:d}, '{}', '{}', '{}')",
+				            player->getGUID(), text, channelName, OTSYS_DATETIME()));
+		}
+	}
 
 	switch (type) {
 		case TALKTYPE_SAY:
@@ -4831,6 +4852,7 @@ void Game::shutdown()
 	}
 
 	ConnectionManager::getInstance().closeAll();
+
 
 	std::cout << " done!" << std::endl;
 }
