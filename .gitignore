@@ -181,6 +181,9 @@ pip-log.txt
 # Notepad++ backups
 *.bak
 
+# documentation config
+Doxyfile
+
 #############
 ## TFS / OT
 #############
