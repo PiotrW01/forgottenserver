@@ -70,6 +70,7 @@ itemAttrTypes stringToItemAttribute(const std::string& str);
 const char* getReturnMessage(ReturnValue value);
 
 int64_t OTSYS_TIME();
+std::string OTSYS_DATETIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 

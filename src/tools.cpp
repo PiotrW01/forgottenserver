@@ -1112,6 +1112,17 @@ int64_t OTSYS_TIME()
 	return duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
+std::string OTSYS_DATETIME()
+{
+	auto now = std::chrono::system_clock::now();
+	std::time_t timeT = std::chrono::system_clock::to_time_t(now);
+	std::tm tm = *std::localtime(&timeT); // or std::gmtime(&timeT) for UTC
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+	return oss.str();
+}
+
 SpellGroup_t stringToSpellGroup(const std::string& value)
 {
 	std::string tmpStr = boost::algorithm::to_lower_copy(value);
