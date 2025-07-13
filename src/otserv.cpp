@@ -128,6 +128,11 @@ void mainLoader(ServiceManager* services)
 		    "The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
+
+	std::cout << ">> Clearing old sessions" << std::endl;
+	auto& db = Database::getInstance();
+	db.executeQuery("TRUNCATE TABLE `sessions`");
+
 	g_databaseTasks.start();
 
 	DatabaseManager::updateDatabase();
