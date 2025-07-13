@@ -391,6 +391,17 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
+CREATE TABLE IF NOT EXISTS `messages` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `player_id` int NOT NULL,
+    `message` varchar(255) NOT NULL,
+    `channel` varchar(255) NOT NULL,
+    `receiver` varchar(255) NOT NULL DEFAULT '',
+    `timestamp` datetime NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
 INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '37'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
